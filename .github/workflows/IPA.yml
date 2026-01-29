@@ -1,0 +1,40 @@
+name: Build iMazing IPA
+on:
+  workflow_dispatch: # باش تطلع ليك بوطونة Run Workflow
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup Theos
+        run: |
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
+          echo "THEOS=~/theos" >> $GITHUB_ENV
+
+      - name: Build Tweak (.dylib)
+        run: |
+          export THEOS=~/theos
+          make package FINALPACKAGE=1
+        
+      - name: Get Azule (To create IPA)
+        run: |
+          git clone https://github.com/Al4ise/Azule ~/azule
+          sudo ln -s ~/azule/azule /usr/local/bin/azule
+
+      - name: Inject Dylib into IPA
+        run: |
+          # هنا خاصك رابط لملف IPA ديال فري فاير (Decrypted)
+          # كمثال غنستعملو رابط وهمي، خاصك تبدلو برابط حقيقي
+          curl -L "رابط_ملف_IPA_هنا" -o original.ipa
+          azule -i original.ipa -o TogaMenu.ipa -f packages/*.deb
+        
+      - name: Upload Finished IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: FreeFire-Modded
+          path: TogaMenu.ipa

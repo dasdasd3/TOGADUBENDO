@@ -41,7 +41,7 @@ MENU_SRC = Menu.mm
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = @@PROJECTNAME@@
+TWEAK_NAME = @@TOGA</>@@
 
 @@PROJECTNAME@@_CFLAGS = -fobjc-arc
 @@PROJECTNAME@@_CCFLAGS = -std=c++11 -fno-rtti -fno-exceptions -DNDEBUG
